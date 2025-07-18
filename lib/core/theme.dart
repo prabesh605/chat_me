@@ -25,7 +25,7 @@ class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
       primaryColor: Colors.white,
-      scaffoldBackgroundColor: Color(0xFF1B202D),
+      scaffoldBackgroundColor: const Color(0xFF1B202D),
       textTheme: TextTheme(
         titleMedium: GoogleFonts.alegreyaSans(
           fontSize: FontSizes.medium,
