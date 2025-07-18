@@ -5,18 +5,19 @@ class AuthInputField extends StatelessWidget {
   final String hint;
   final IconData icon;
   final TextEditingController controller;
-  final bool isPassword = false;
+  final bool isPassword;
   const AuthInputField(
       {super.key,
       required this.hint,
       required this.icon,
-      required this.controller});
+      required this.controller,
+      this.isPassword = false});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(8),
-      padding: EdgeInsets.all(4),
+      margin: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: DefaultColors.sentMessageInput,
         borderRadius: BorderRadius.circular(25),

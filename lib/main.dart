@@ -1,23 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:new_chat_me/chat_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:new_chat_me/core/theme.dart';
-import 'package:new_chat_me/login_page.dart';
-import 'package:new_chat_me/message_page.dart';
-import 'package:new_chat_me/register_page.dart';
+import 'package:new_chat_me/features/auth/data/repositories/auth_repository_impl.dart';
+
+import 'package:new_chat_me/features/auth/domain/usecases/login_usecase.dart';
+import 'package:new_chat_me/features/auth/domain/usecases/register_usecase.dart';
+import 'package:new_chat_me/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:new_chat_me/features/auth/presentation/pages/login_page.dart';
+
+import 'package:new_chat_me/features/auth/presentation/pages/register_page.dart';
+
+import 'features/auth/data/datasources/auth_remote_data_source.dart';
 
 void main() {
-  runApp(const MyApp());
+  final authRepository =
+      AuthRepositoryImpl(authRemoteDataSource: AuthRemoteDataSource());
+  runApp(
+    MyApp(
+      authRepository: authRepository,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AuthRepositoryImpl authRepository;
+
+  const MyApp({super.key, required this.authRepository});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
-      home: const LoginPage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => AuthBloc(
+            registerUseCase: RegisterUseCase(repository: authRepository),
+            loginUseCase: LoginUseCase(repository: authRepository),
+          ),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.darkTheme,
+        home: const RegisterPage(),
+        routes: {
+          '/login': (_) => const LoginPage(),
+          '/register': (_) => const RegisterPage()
+        },
+      ),
     );
   }
 }
